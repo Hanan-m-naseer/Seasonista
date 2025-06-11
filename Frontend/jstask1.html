@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Sum Of Array</title>
+    </head>
+    <body>
+        <h1>sum of array</h1>
+        <p id="array"></p>
+        <p id="result"></p>
+        <script>
+            function sumOfArray(num){
+                let sum=0;
+                for(let i = 0 ; i < num.length ; i++){
+                sum += num[i];
+                }
+                    return sum;
+            }
+                
+                
+        const nums = [1,2,3,4,5]
+        const result = sumOfArray(nums);
+        document.getElementById('array').textContent = 'Array: [' + nums.join(', ') + ']';
+        document.getElementById('result').textContent='the sum is '+result;
+        </script>
+    </body>
+</html>
