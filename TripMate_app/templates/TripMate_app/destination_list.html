@@ -1,0 +1,107 @@
+{% extends 'TripMate_app/base.html' %}
+
+{% block content %}
+<style>
+    .destination-list {
+        max-width: 1000px;
+        margin: 40px auto;
+        padding: 40px 20px;
+        position: relative;
+        background-color: rgba(247, 251, 250, 0.9); /* Slightly transparent white */
+        border-radius: 12px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+
+    /* Background image container */
+    .destination-list::before {
+        content: "";
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1350&q=80');
+        background-size: cover;
+        background-position: center;
+        opacity: 1.25; /* fade effect */
+        z-index: 0;
+        border-radius: 12px;
+    }
+
+    /* Content inside destination list should be above bg */
+    .destination-list > * {
+        position: relative;
+        z-index: 1;
+    }
+
+    .destination-card {
+        background-color: #6e8a92;
+        border-left: 6px solid #9fdff0;
+        padding: 20px;
+        margin-bottom: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s ease;
+    }
+
+    .destination-card:hover {
+        transform: translateY(-4px);
+    }
+
+    .destination-card h3 {
+        margin-top: 0;
+        color: #074c4f;
+        font-size: 1.8rem;
+    }
+
+    .destination-card p {
+        margin: 10px 0;
+        color: #333;
+        font-weight: 500;
+    }
+
+    .destination-card .btn {
+        background-color: #5C8D89;
+        color: #fff;
+        padding: 10px 18px;
+        border: none;
+        border-radius: 6px;
+        text-decoration: none;
+        display: inline-block;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+    }
+
+    .destination-card .btn:hover {
+        background-color: #417d76;
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 30px;
+        color: #074c4f;
+        font-size: 2.5rem;
+    }
+
+    @media (max-width: 768px) {
+        .destination-list {
+            padding: 30px 15px;
+        }
+        .destination-card h3 {
+            font-size: 1.5rem;
+        }
+    }
+</style>
+
+<div class="destination-list">
+    <h2>All Destinations</h2>
+
+    {% for dest in destinations %}
+        <div class="destination-card">
+            <h3>{{ dest.place_name }}</h3>
+            <p>{{ dest.state }}, {{ dest.district }}</p>
+            <a class="btn" href="{% url 'destination_detail' dest.pk %}">View Details</a>
+        </div>
+    {% empty %}
+        <p>No destinations found.</p>
+    {% endfor %}
+</div>
+{% endblock %}

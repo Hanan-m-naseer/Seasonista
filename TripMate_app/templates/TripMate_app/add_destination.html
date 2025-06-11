@@ -1,0 +1,76 @@
+{% extends 'TripMate_app/base.html' %}
+
+{% block content %}
+<div class="form-container">
+    <h2>Add New Destination</h2>
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-fields">
+            {{ form.as_p }}
+        </div>
+        <button type="submit" class="btn">Add Destination</button>
+    </form>
+</div>
+
+<style>
+    .form-container {
+        background-color: #F4F9F4;
+        padding: 30px;
+        border-radius: 12px;
+        max-width: 700px;
+        margin: 20px auto;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .form-container h2 {
+        color: #5C8D89;
+        margin-bottom: 20px;
+    }
+
+    .form-fields p {
+        margin-bottom: 15px;
+    }
+
+    .form-fields label {
+        display: block;
+        margin-bottom: 6px;
+        color: #5C8D89;
+        font-weight: bold;
+    }
+
+    .form-fields input[type="text"],
+    .form-fields input[type="url"],
+    .form-fields textarea {
+        width: 100%;
+        padding: 10px;
+        border: 2px solid #A7D7C5;
+        border-radius: 6px;
+        font-size: 1rem;
+        background-color: #fff;
+        transition: border-color 0.3s;
+    }
+
+    .form-fields input:focus,
+    .form-fields textarea:focus {
+        outline: none;
+        border-color: #74B49B;
+    }
+
+    .btn {
+        background-color: #5C8D89;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        cursor: pointer;
+        margin-top: 15px;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn:hover {
+        background-color: #74B49B;
+    }
+</style>
+{% endblock %}

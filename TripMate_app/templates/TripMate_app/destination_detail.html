@@ -1,0 +1,108 @@
+{% extends 'TripMate_app/base.html' %}
+
+{% block content %}
+<style>
+  .detail-container {
+    max-width: 900px;
+    margin: 40px auto;
+    background-color: #6e8a92;
+    padding: 30px 40px;
+    border-radius: 15px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    color: #333;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  .detail-container h2 {
+    font-size: 2.8rem;
+    margin-bottom: 10px;
+    color: #333;
+    border-bottom: 3px solid #5C8D89;
+    padding-bottom: 10px;
+  }
+
+  .detail-container p {
+    font-size: 1.15rem;
+    line-height: 1.6;
+    margin: 12px 0;
+  }
+
+  .detail-container strong {
+    color: #3c535a;
+  }
+
+  .detail-container a {
+    color: #f9b003;
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .detail-container a:hover {
+    text-decoration: underline;
+  }
+
+  h3 {
+    margin-top: 30px;
+    color: #333;
+    font-size: 2rem;
+    border-bottom: 2px solid #5C8D89;
+    padding-bottom: 6px;
+  }
+
+  .images-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 15px;
+  }
+
+  .images-wrapper img {
+    width: 280px;
+    border-radius: 12px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.12);
+    transition: transform 0.3s ease;
+    cursor: pointer;
+  }
+
+  .images-wrapper img:hover {
+    transform: scale(1.05);
+  }
+
+  .btn {
+    display: inline-block;
+    margin-top: 25px;
+    background-color: #5C8D89;
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 700;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: background-color 0.3s ease;
+  }
+
+  .btn:hover {
+    background-color: #417d76;
+  }
+</style>
+
+<div class="detail-container">
+  <h2>{{ destination.place_name }}</h2>
+  
+  <p><strong>Weather:</strong> {{ destination.weather }}</p>
+  <p><strong>Location:</strong> {{ destination.state }}, {{ destination.district }}</p>
+  <p><strong>Description:</strong> {{ destination.description }}</p>
+  <p><a href="{{ destination.google_map_link }}" target="_blank" rel="noopener">View on Google Maps</a></p>
+
+  <h3>Images</h3>
+  <div class="images-wrapper">
+    {% for img in destination.images.all %}
+      <img src="{{ img.image.url }}" alt="Image of {{ destination.place_name }}">
+    {% empty %}
+      <p>No images uploaded yet.</p>
+    {% endfor %}
+  </div>
+
+  <a class="btn" href="{% url 'upload_images' destination.pk %}">Add Image</a>
+</div>
+{% endblock %}
