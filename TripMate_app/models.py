@@ -1,23 +1,27 @@
 from django.db import models
+from django.utils.text import slugify
 
+class Season(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+    slug = models.SlugField(blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+    image = models.ImageField(upload_to='season_images/', blank=True, null=True)
 
-# Create your models here.
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
 
 
 class Destination(models.Model):
-    place_name = models.CharField(max_length=100)
-    weather = models.CharField(max_length=100)
-    state = models.CharField(max_length=100)
-    district = models.CharField(max_length=100)
-    google_map_link = models.URLField()
+    season = models.ForeignKey(Season, on_delete=models.CASCADE, related_name='destinations')
+    name = models.CharField(max_length=100)
     description = models.TextField()
+    best_months = models.CharField(max_length=100)
+    image = models.ImageField(upload_to='destination_images/', blank=True, null=True)
 
     def __str__(self):
-        return self.place_name
-
-class DestinationImage(models.Model):
-    destination = models.ForeignKey(Destination, on_delete=models.CASCADE, related_name='images')
-    image = models.ImageField(upload_to='destination_images/')
-
-    def __str__(self):
-        return f"Image for {self.destination.place_name}"
+        return self.name

@@ -1,0 +1,33 @@
+{% extends 'TripMate_app/base.html' %}
+
+{% block title %}{{ season.name }} Destinations{% endblock %}
+
+{% block body_class %}{{ season.slug }}{% endblock %}
+
+{% block content %}
+<div class="season-hero">
+  <h1>{{ season.name }}</h1>
+  <p>Find the perfect destinations for {{ season.name }} vibes!</p>
+</div>
+
+<div class="destination-grid">
+  {% for destination in destinations %}
+    <div class="destination-card">
+      {% if destination.image %}
+        <img src="{{ destination.image.url }}" alt="{{ destination.name }}">
+      {% endif %}
+      <div class="card-overlay">
+        <h2>{{ destination.name }}</h2>
+        <p>{{ destination.description }}</p>
+        <p><strong>Best Months:</strong> {{ destination.best_months }}</p>
+      </div>
+    </div>
+  {% empty %}
+    <p>No destinations found for this season yet!</p>
+  {% endfor %}
+</div>
+
+<footer class="footer">
+  <p>&copy; 2025 Seasonista. All rights reserved.</p>
+</footer>
+{% endblock %}

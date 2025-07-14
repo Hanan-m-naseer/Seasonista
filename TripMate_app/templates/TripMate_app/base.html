@@ -1,114 +1,88 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>TripMate</title>
-    <style>
-        :root {
-            --bg: #F4F9F4;
-            --primary: #3c535a;
-            --accent: #5C8D89;
-            --highlight: #A7D7C5;
-            --text-dark: #333;
-            --white: #fff;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background-color: var(--bg);
-            color: var(--text-dark);
-        }
-
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: var(--primary);
-            padding: 1rem 2rem;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .navbar .logo {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: var(--white);
-            letter-spacing: 1px;
-        }
-
-        .navbar .nav-links a {
-            color: var(--white);
-            text-decoration: none;
-            margin-left: 2rem;
-            font-weight: 500;
-            font-size: 1rem;
-            transition: color 0.3s ease;
-        }
-
-        .navbar .nav-links a:hover {
-            color: var(--highlight);
-        }
-
-        .content {
-            padding: 2rem 3rem;
-        }
-
-        .btn {
-            background-color: var(--accent);
-            color: var(--white);
-            padding: 10px 16px;
-            border: none;
-            border-radius: 5px;
-            text-decoration: none;
-            cursor: pointer;
-            font-weight: 600;
-            transition: background-color 0.3s ease;
-        }
-
-        .btn:hover {
-            background-color: var(--primary);
-        }
-
-        @media (max-width: 768px) {
-            .navbar {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .navbar .nav-links {
-                margin-top: 10px;
-                width: 100%;
-                display: flex;
-                justify-content: flex-start;
-                gap: 1rem;
-                flex-wrap: wrap;
-            }
-
-            .content {
-                padding: 1.5rem;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}TripMate{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'styles/styles.css' %}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Arizonia&family=Lexend+Giga:wght@100..900&display=swap" rel="stylesheet">
+  {% block extra_head %}{% endblock %}
 </head>
-<body>
+<body class="{% block body_class %}{% endblock %}">
+  <nav class="navbar">
+  <div class="logo">
+    <span class="highlight">Seasonista</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/about/">About</a></li>
+    <li><a href="/contact/">Contact</a></li>
+  </ul>
+</nav>
 
-    <div class="navbar">
-        <div class="logo">TripMate</div>
-        <div class="nav-links">
-            <a href="{% url 'destination_list' %}">Destinations</a>
-            <a href="{% url 'add_destination' %}">Create Destination</a>
-        </div>
-    </div>
+<div id="chatbot-toggle">
+  <span id="chatbot-toggle-icon" class="chatbot-icon">🍂</span>
+  <span class="chatbot-label">TravelBot</span>
+</div>
 
-    <div class="content">
-        {% block content %}
-        {% endblock %}
-    </div>
+<div id="chatbot-window" class="hidden">
+  <div class="chat-header">
+    <span class="chatbot-icon">🍂</span>
+    <span class="chatbot-label">TravelBot</span>
+  </div>
+  <div class="chat-body" id="chatbot-messages"></div>
+  <div class="chat-input">
+    <input type="text" id="chatbot-input" placeholder="Ask about destinations...">
+    <button type="button" id="send-btn">Send</button>
+  </div>
+</div>
 
+<script>
+document.getElementById('chatbot-toggle-icon').addEventListener('click', () => {
+  const windowEl = document.getElementById('chatbot-window');
+  windowEl.classList.toggle('hidden');
+});
+
+document.getElementById('send-btn').addEventListener('click', async () => {
+  await sendMessage();
+});
+
+async function sendMessage() {
+  const input = document.getElementById('chatbot-input');
+  const message = input.value.trim();
+  if (!message) return;
+
+  appendMessage('You', message);
+  input.value = '';
+
+  try {
+    const response = await fetch('/chatbot/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: `message=${encodeURIComponent(message)}`
+    });
+    const data = await response.json();
+    appendMessage('TravelBot', data.reply);
+  } catch (error) {
+    appendMessage('TravelBot', 'Sorry, something went wrong.');
+  }
+}
+
+function appendMessage(sender, text) {
+  const messages = document.getElementById('chatbot-messages');
+  const msg = document.createElement('div');
+  msg.textContent = `${sender}: ${text}`;
+  messages.appendChild(msg);
+  messages.scrollTop = messages.scrollHeight;
+}
+</script>
+
+
+  {% block content %}{% endblock %}
 </body>
 </html>

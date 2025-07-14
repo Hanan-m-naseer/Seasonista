@@ -1,1 +1,15 @@
-git 
+# Python
+__pycache__/
+*.py[cod]
+*.sqlite3
+.env
+env/
+*.log
+
+# VSCode
+.vscode/
+
+# Django
+db.sqlite3
+/static/
+media/

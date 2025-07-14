@@ -1,55 +1,81 @@
-from django.shortcuts import render,get_object_or_404, redirect
-from rest_framework import viewsets
-from .models import Destination, DestinationImage
-from .serializers import DestinationSerializer, DestinationImageSerializer
-from .forms import DestinationForm, DestinationImageForm
+import requests
+import json
+from django.shortcuts import render, get_object_or_404
+from .models import Season, Destination
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 
 
-# Create your views here.
 
-class DestinationViewSet(viewsets.ModelViewSet):
-    queryset = Destination.objects.all()
-    serializer_class = DestinationSerializer
+# Home page: show all seasons
+def home(request):
+    seasons = Season.objects.all()
+    return render(request, 'TripMate_app/home.html')
 
-class DestinationImageViewSet(viewsets.ModelViewSet):
-    queryset = DestinationImage.objects.all()
-    serializer_class = DestinationImageSerializer
+# Season page: list of destinations for selected season
+def season_detail(request, slug):
+    season = get_object_or_404(Season, slug=slug)
+    destinations = season.destinations.all()
+    return render(request, 'TripMate_app/season_detail.html', {
+        'season': season,
+        'destinations': destinations
+    })
 
-def destination_list(request):
-    destinations = Destination.objects.all()
-    return render(request, 'TripMate_app/destination_list.html', {'destinations': destinations})
-
-def destination_detail(request, pk):
-    destination = get_object_or_404(Destination, pk=pk)
-    return render(request, 'TripMate_app/destination_detail.html', {'destination': destination})
-
-def add_destination(request):
-    if request.method == 'POST':
-        form = DestinationForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect('destination_list')
-    else:
-        form = DestinationForm()
-    return render(request, 'TripMate_app/destination_form.html', {'form': form})
-
-def upload_images(request, pk):
-    destination = get_object_or_404(Destination, pk=pk)
-
-    if request.method == 'POST':
-        form = DestinationImageForm(request.POST, request.FILES)
-        if form.is_valid():
-            image = form.save(commit=False)
-            image.destination = destination
-            image.save()
-            return redirect('destination_detail', pk=pk)
-    else:
-        form = DestinationImageForm()
-
-    return render(request, 'TripMate_app/image_upload.html', {
-        'form': form,
+# Destination detail page
+def destination_detail(request, destination_id):
+    destination = get_object_or_404(Destination, pk=destination_id)
+    return render(request, 'TripMate_app/destination_detail.html', {
         'destination': destination
     })
 
-def home(request):
-    return render(request, 'TripMate_app/home.html')
+
+
+
+@csrf_exempt
+def chatbot(request):
+    if request.method == "POST":
+        user_message = request.POST.get('message', '')
+
+        # Pull destinations
+        destinations = Destination.objects.all()
+        dest_list = "\n".join([
+            f"- {d.name}: {d.description}. Best months: {d.best_months}"
+            for d in destinations
+        ])
+
+        prompt = f"""
+          You are Seasonista's travel assistant bot.
+          You know these destinations:
+          greece,manali,japan
+
+         {dest_list}
+
+        Always answer in a friendly, helpful way about travel plans, best months to visit, 
+        and seasonal recommendations.
+
+        User: {user_message}
+        """
+
+        ollama_payload = {
+            "model": "phi3:mini",
+            "prompt": prompt
+        }
+
+        try:
+            res = requests.post(
+                'http://localhost:11434/api/generate',
+                json=ollama_payload,
+                stream=True,
+                timeout=120
+            )
+            answer = ""
+            for line in res.iter_lines():
+                if line:
+                    data = json.loads(line)
+                    answer += data.get("response", "")
+            return JsonResponse({"reply": answer})
+
+        except Exception as e:
+            return JsonResponse({"reply": "Sorry, I couldn't answer your question right now."})
+
+    return JsonResponse({"error": "Invalid request"}, status=400)

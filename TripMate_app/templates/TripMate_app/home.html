@@ -1,86 +1,35 @@
 {% extends 'TripMate_app/base.html' %}
 
+{% block title %}Home{% endblock %}
+
 {% block content %}
-<style>
-    .hero {
-        position: relative;
-        width: 100%;
-        max-width: 1200px;
-        height: 500px;
-        margin: 40px auto;
-        border-radius: 16px;
-        overflow: hidden;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-    }
+<div class="hero-section">
+  <div class="overlay"></div>
+  <div class="content">
+    <section class="about-section">
+      <h1>Welcome to <span class="highlight">Seasonista</span></h1>
+      <p>Plan your next adventure by choosing the season that inspires you most.
+        <br> Explore destinations perfectly timed for Spring, Summer, Autumn, or Winter vibes.</p>
+    </section>
 
-    .hero img {
-        position: absolute;
-        top: 0;
-        left: 0;
-        height: 100%;
-        width: 100%;
-        object-fit: cover;
-        z-index: 0;
-    }
-
-    .hero::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: rgba(0, 0, 0, 0.5); /* dark overlay */
-        z-index: 1;
-    }
-
-    .hero-content {
-        position: relative;
-        z-index: 2;
-        padding: 40px;
-        color: #fff;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        height: 100%;
-        max-width: 700px;
-    }
-
-    .hero-content h1 {
-        font-size: 3.2rem;
-        margin-bottom: 20px;
-        color: #FDC500;
-    }
-
-    .hero-content p {
-        font-size: 1.4rem;
-        color: #fffbd4;
-        line-height: 1.6;
-    }
-
-    @media (max-width: 768px) {
-        .hero-content {
-            padding: 20px;
-        }
-
-        .hero-content h1 {
-            font-size: 2.2rem;
-        }
-
-        .hero-content p {
-            font-size: 1.1rem;
-        }
-
-        .hero {
-            height: 400px;
-        }
-    }
-</style>
-
-<div class="hero">
-    <img src="https://www.nativeplanet.com/img/2023/11/tranquil-pine-forest-with-misty-ambiance-in-vagamon_1699430062129-1200x675-20231108133001.jpg" alt="Scenic Destination">
-    <div class="hero-content">
-        <h1>Welcome to TripMate</h1>
-        <p>
-            TripMate is your travel companion — explore and manage tourist destinations across India. Add your favorite spots, upload photos, and plan your next adventure effortlessly.
-        </p>
+    <div class="season-grid">
+      <a href="/season/spring/" class="season-card spring">
+        <div class="overlay">Spring</div>
+      </a>
+      <a href="/season/summer/" class="season-card summer">
+        <div class="overlay">Summer</div>
+      </a>
+      <a href="/season/autumn/" class="season-card autumn">
+        <div class="overlay">Autumn</div>
+      </a>
+      <a href="/season/winter/" class="season-card winter">
+        <div class="overlay">Winter</div>
+      </a>
     </div>
+  </div>
 </div>
+
+<footer class="footer">
+  <p>&copy; 2025 Seasonista. All rights reserved.</p>
+</footer>
 {% endblock %}
