@@ -23,7 +23,7 @@
 ### ✅ Home Page
 > A clean landing page inviting users to explore by season.
 
-![Home Page](screenshots/homepage.png)
+![Home Page](Screenshots/homepage.jpg)
 
 ---
 
@@ -31,34 +31,28 @@
 > Each season page has its own background and shows destinations in cards.
 
 #### 🌸 Spring
-![Spring Page](screenshots/spring.png)
+![Spring Page](Screenshots/spring.jpg)
 
 #### ☀️ Summer
-![Summer Page](screenshots/summer.png)
+![Summer Page](Screenshots/summer.jpg)
 
 #### 🍂 Autumn
-![Autumn Page](screenshots/autumn.png)
+![Autumn Page](Screenshots/autumn.jpg)
 
 #### ❄️ Winter
-![Winter Page](screenshots/winter.png)
+![Winter Page](Screenshots/winter.jpg)
 
 ---
 
-### ✅ Destination Cards
-> Cards include images, descriptions, and best months to visit.
-
-![Destination Cards](screenshots/destinations.png)
-
----
 
 ### ✅ TravelBot Chat Assistant
 > Bottom-right floating button with an autumn leaf icon and label. Click to chat.
 
 #### Chat Icon
-![Chat Icon](screenshots/chat_icon.png)
+![Chat Icon](Screenshots/summer_bot.jpg)
 
-#### Chat Window
-![Chat Window](screenshots/chat_window.png)
+#### Chat Bot Code
+![Chat Window](Screenshots/working_bot.jpg)
 
 ---
 
